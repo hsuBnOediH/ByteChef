@@ -1,0 +1,37 @@
+# ── docker-compose.yml ───────────────────────────────────────────────────────
+# Deploy ByteChef on your GCP VM alongside your existing services.
+# Usage:
+#   docker compose up -d          # start in background
+#   docker compose logs -f        # follow logs
+#   docker compose restart bytechef  # reload after code changes
+
+services:
+  bytechef:
+    build: .
+    container_name: bytechef
+    restart: unless-stopped # auto-restart on crash or VM reboot
+
+    # ── Environment: reads API keys from .env file ────────────────────────
+    env_file:
+      - .env
+
+    # ── Volumes: persist state.md outside the container ──────────────────
+    volumes:
+      - bytechef_state:/app
+        # mounts /app directory as a named volume
+        # so state.md survives `docker compose down`
+
+    # ── Ports: only expose to localhost; Nginx handles public traffic ─────
+    ports:
+      - "127.0.0.1:8501:8501" # NOT 0.0.0.0 — keeps it internal
+
+    # ── Logging ───────────────────────────────────────────────────────────
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  bytechef_state:
+    driver: local

@@ -1,0 +1,21 @@
+# ── Streamlit server config ──────────────────────────────────────────────────
+# Place this file at: .streamlit/config.toml
+# It configures the Streamlit server to behave correctly behind an Nginx proxy.
+
+[server]
+port = 8501
+address = "0.0.0.0"
+headless = true              # suppress browser auto-open
+enableCORS = false           # let Nginx handle CORS
+enableXsrfProtection = false # needed when behind a reverse proxy
+
+[browser]
+gatherUsageStats = false
+
+[theme]
+base = "dark"
+primaryColor = "#ff6b35"
+backgroundColor = "#0e1117"
+secondaryBackgroundColor = "#1a1d23"
+textColor = "#fafafa"
+font = "sans serif"
