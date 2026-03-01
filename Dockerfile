@@ -4,10 +4,9 @@
 
 FROM python:3.11-slim
 
-# System deps for audio processing (needed by some whisper / audio libraries)
+# Install only curl for health check (ffmpeg removed — format detected via magic bytes in Python)
 RUN apt-get update && apt-get install -y --no-install-recommends \
-        ffmpeg \
-        curl \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
